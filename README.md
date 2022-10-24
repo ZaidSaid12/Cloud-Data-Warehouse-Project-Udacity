@@ -1,0 +1,102 @@
+# Project 3: Build A Cloud Data Warehouse
+This project builds an ELT pipeline that extracts data from S3, stages them in Redshift, and transforms data into a set of dimensional tables for Sparkify analytics team to continue finding insights in what songs their users are listening to.
+---
+## sql_queries.py
+- This is a helper file which contains the required sql queries which will be used in the project, it contains
+    - Queries to delete the current existing tables.
+    - Queries to create the tables as per the design.
+    - Queries to copy the data from s3 bucket to the staging tables.
+    - Queries to insert the data into fact tables and dimension tables.
+---
+## create_tables.py
+- This python script is used to drop and create the tables used in this project, it contains two functions `drop_tables` and `create_tables`
+    - Drop_tables
+        - This function uses the queries written in `sql_queries.py` in order to drop the tables if they already exists.
+    - Create_tables
+        - This function uses the queries written in `sql_queries.py` in order to create the tables based on the provided structure.
+---
+## etl.py
+- This python script is used to copy the data from the s3 bucket provided by Udacity, and then insert the data after transformation into the correct fact tables and dimension tables.
+- This script consists of two python functions `load_staging_tables` and `insert_tables`
+    - load_staging_tables
+        - This function uses the copy queries written in `sql_queries` to copy the data from s3 bucket to the staging tables.
+    - insert_tables
+        - This function uses the copy queries written in `sql_queries` to insert the data into the fact and dimension tables.
+---
+---
+## Schema
+- The schema for this project consists of two staging tables
+    - staging_events
+        - artist VARCHAR,
+        - auth VARCHAR,
+        - firstName VARCHAR,
+        - gender CHAR(1),
+        - itemInSession INT,
+        - lastName VARCHAR,
+        - length FLOAT,
+        - level VARCHAR,
+        - location TEXT,
+        - method VARCHAR,
+        - page VARCHAR,
+        - registration VARCHAR,
+        - sessionId INT,
+        - song VARCHAR,
+        - status INT,
+        - ts BIGINT,
+        - userAgent TEXT,
+        - userId INT
+    - staging_songs
+        - artist_id VARCHAR,
+        - artist_latitude FLOAT,
+        - artist_location TEXT,
+        - artist_longitude FLOAT,
+        - artist_name VARCHAR,
+        - duration FLOAT,
+        - num_songs INT,
+        - song_id VARCHAR,
+        - title VARCHAR,
+        - year INT
+---        
+- The Fact table.
+    - songplays
+        - songplay_id INT IDENTITY(0,1),
+        - start_time TIMESTAMP,
+        - user_id INT,
+        - level VARCHAR,
+        - song_id VARCHAR,
+        - artist_id VARCHAR,
+        - session_id INT,
+        - location TEXT,
+        - user_agent TEXT
+---
+- The Dimension Tables.
+    - users
+        - user_id INT,
+        - first_name VARCHAR,
+        - last_name VARCHAR,
+        - gender CHAR(1),
+        - level VARCHAR
+
+    - songs
+        - song_id VARCHAR,
+        - title VARCHAR,
+        - artist_id VARCHAR,
+        - year INT,
+        - duration FLOAT
+
+    - artists
+        - artist_id VARCHAR,
+        - name VARCHAR,
+        - location TEXT ,
+        - latitude FLOAT ,
+        - longitude FLOAT
+
+    - time
+        - start_time TIMESTAMP,
+        - hour INT,
+        - day INT,
+        - week INT,
+        - month INT,
+        - year INT,
+        - weekday VARCHAR
+---
